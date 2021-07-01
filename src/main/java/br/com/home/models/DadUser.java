@@ -26,7 +26,8 @@ public class DadUser implements UserDetails {
 	@GeneratedValue
 	private Long id;
 
-	private boolean active;
+	private boolean accountActive;
+	private boolean emailActive;
 
 	private String username;
 	private String password;
@@ -75,7 +76,7 @@ public class DadUser implements UserDetails {
 
 	@Override
 	public boolean isEnabled() {
-		return true;
+		return accountActive;
 	}
 
 }

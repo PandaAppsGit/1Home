@@ -45,7 +45,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 				.antMatchers(HttpMethod.POST, "/api/v1/clients/sign-up").permitAll().and().authorizeRequests()
 				.antMatchers(HttpMethod.POST, "/api/v1/doctors/sign-up").permitAll().and().authorizeRequests()
 				.antMatchers(HttpMethod.POST, "/api/v1/physiotherapists/sign-up").permitAll().and().authorizeRequests()
-				.antMatchers(HttpMethod.GET, "/api/v1/users/account-activation").permitAll().and().authorizeRequests()
+				.antMatchers(HttpMethod.GET, "/api/v1/users/email-activation").permitAll().and().authorizeRequests()
 				.antMatchers(HttpMethod.POST, "/api/v1/users/password-recovery/{email}").permitAll().and()
 				.authorizeRequests().antMatchers(HttpMethod.POST, "/api/v1/users/password-recovery").permitAll().and()
 				.authorizeRequests().antMatchers(HttpMethod.GET, "/api/v1/users/password-recovery").permitAll().and()

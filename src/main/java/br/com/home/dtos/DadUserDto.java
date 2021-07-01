@@ -18,7 +18,8 @@ public class DadUserDto {
 
 	private long id;
 
-	private boolean active;
+	private boolean accountActive;
+	private boolean emailActive;
 
 	private String username;
 	private String password;

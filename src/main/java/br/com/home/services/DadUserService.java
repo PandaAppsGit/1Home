@@ -50,7 +50,7 @@ public class DadUserService {
 		roles.add(roleRepository.findByName(roleName));
 		dadUser.setRoles(roles);
 
-		dadUser.setActive(false);
+		dadUser.setEmailActive(false);
 
 		dadUser.setPassword(passwordEncoder.encode(dadUser.getPassword()));
 
@@ -109,9 +109,21 @@ public class DadUserService {
 
 	}
 
-	public DadUserDto enableClient(DadUser dadUser) {
-		dadUser.setActive(true);
+	public DadUserDto userEmailActivation(DadUser dadUser) {
+		dadUser.setEmailActive(true);
 		dadUser.setAccountActivationToken(null);
+
+		return DadUserDto.create(repository.save(dadUser));
+	}
+
+	public DadUserDto userAccountActivation(DadUser dadUser) {
+		dadUser.setAccountActive(true);
+
+		return DadUserDto.create(repository.save(dadUser));
+	}
+
+	public DadUserDto userDisableAccount(DadUser dadUser) {
+		dadUser.setAccountActive(false);
 
 		return DadUserDto.create(repository.save(dadUser));
 	}

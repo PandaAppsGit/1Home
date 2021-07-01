@@ -5,9 +5,12 @@ import javax.servlet.http.HttpServletRequest;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.repository.query.Param;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.annotation.Secured;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -22,7 +25,7 @@ public class DadUserController {
 	@Autowired
 	DadUserService service;
 
-	@GetMapping("/account-activation")
+	@GetMapping("/email-activation")
 	public String showActivationAccountMensage(HttpServletRequest request) {
 		String accountActivationToken = request.getParameter("account-activation-token");
 		DadUser dadUser = service.getByAccountActivationToken(accountActivationToken);
@@ -31,7 +34,7 @@ public class DadUserController {
 			return "<h1>Erro: Token Inválido</h1>";
 		}
 
-		service.enableClient(dadUser);
+		service.userEmailActivation(dadUser);
 		return "<h1>Conta ativada com sucesso!</h1>";
 	}
 
@@ -103,6 +106,24 @@ public class DadUserController {
 			return "<h1>Senha alterada com sucesso!<h1>";
 		}
 
+	}
+
+	@Secured({ "ROLE_ADMIN" })
+	@PutMapping("/account-activation")
+	public ResponseEntity<DadUserDto> userAccountActivation(@RequestBody DadUser dadUser) {
+
+		DadUserDto dadUserDto = service.userAccountActivation(dadUser);
+
+		return ResponseEntity.ok(dadUserDto);
+	}
+
+	@Secured({ "ROLE_ADMIN" })
+	@PutMapping("/account-disable")
+	public ResponseEntity<DadUserDto> userAccountDisable(@RequestBody DadUser dadUser) {
+
+		DadUserDto dadUserDto = service.userDisableAccount(dadUser);
+
+		return ResponseEntity.ok(dadUserDto);
 	}
 
 }
