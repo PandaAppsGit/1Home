@@ -10,11 +10,10 @@ public class ClientDto {
 
 	private Long id;
 
-	private boolean active;
-
 	private String name;
 	private String email;
 	private String cellphone;
+	private String photo;
 
 	public static ClientDto create(Client c) {
 		ModelMapper modelMapper = new ModelMapper();

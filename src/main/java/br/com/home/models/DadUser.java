@@ -38,6 +38,7 @@ public class DadUser implements UserDetails {
 	private String name;
 	private String email;
 	private String cellphone;
+	private String photo;
 
 	@ManyToMany(fetch = FetchType.EAGER)
 	@JoinTable(name = "dad_user_roles", joinColumns = @JoinColumn(name = "dad_user_id", referencedColumnName = "id"), inverseJoinColumns = @JoinColumn(name = "role_id", referencedColumnName = "id"))

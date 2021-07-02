@@ -109,19 +109,28 @@ public class DadUserController {
 	}
 
 	@Secured({ "ROLE_ADMIN" })
-	@PutMapping("/account-activation")
-	public ResponseEntity<DadUserDto> userAccountActivation(@RequestBody DadUser dadUser) {
+	@PutMapping("/account-activation/{id}")
+	public ResponseEntity<DadUserDto> userAccountActivation(@PathVariable Long id) {
 
-		DadUserDto dadUserDto = service.userAccountActivation(dadUser);
+		DadUserDto dadUserDto = service.userAccountActivation(id);
 
 		return ResponseEntity.ok(dadUserDto);
 	}
 
 	@Secured({ "ROLE_ADMIN" })
-	@PutMapping("/account-disable")
-	public ResponseEntity<DadUserDto> userAccountDisable(@RequestBody DadUser dadUser) {
+	@PutMapping("/account-disable/{id}")
+	public ResponseEntity<DadUserDto> userAccountDisable(@PathVariable Long id) {
 
-		DadUserDto dadUserDto = service.userDisableAccount(dadUser);
+		DadUserDto dadUserDto = service.userDisableAccount(id);
+
+		return ResponseEntity.ok(dadUserDto);
+	}
+
+	@Secured({ "ROLE_ADMIN" })
+	@PutMapping("/{id}")
+	public ResponseEntity<DadUserDto> update(@PathVariable Long id, @RequestBody DadUser dadUser) {
+
+		DadUserDto dadUserDto = service.update(id, dadUser);
 
 		return ResponseEntity.ok(dadUserDto);
 	}

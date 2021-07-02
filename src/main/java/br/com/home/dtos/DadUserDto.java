@@ -27,6 +27,7 @@ public class DadUserDto {
 	private String name;
 	private String email;
 	private String cellphone;
+	private String photo;
 
 	private String token;
 

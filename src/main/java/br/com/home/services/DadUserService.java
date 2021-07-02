@@ -52,6 +52,8 @@ public class DadUserService {
 
 		dadUser.setEmailActive(false);
 
+		dadUser.setAccountActive(false);
+
 		dadUser.setPassword(passwordEncoder.encode(dadUser.getPassword()));
 
 		String activationAccountLink = getSiteURL(request)
@@ -62,6 +64,32 @@ public class DadUserService {
 		} catch (Exception e) {
 			System.out.println(e);
 		}
+
+		DadUser d = repository.save(dadUser);
+
+		return DadUserDto.create(d);
+
+	}
+
+	public DadUserDto adminSignUp(DadUser dadUser) {
+		Assert.isTrue(repository.findByUsername(dadUser.getUsername()) == null,
+				"O Login do usuário já está cadastrado.");
+		;
+
+		Assert.isTrue(repository.findByEmail(dadUser.getEmail()) == null, "O Email do usuário já está cadastrado.");
+		;
+
+		dadUser.setAccountActivationToken(null);
+
+		List<Role> roles = new ArrayList<Role>();
+		roles.add(roleRepository.findById(4L).get());
+		dadUser.setRoles(roles);
+
+		dadUser.setEmailActive(true);
+
+		dadUser.setAccountActive(true);
+
+		dadUser.setPassword(passwordEncoder.encode(dadUser.getPassword()));
 
 		DadUser d = repository.save(dadUser);
 
@@ -82,6 +110,27 @@ public class DadUserService {
 		} catch (Exception e) {
 			System.out.println(e);
 			return ResponseEntity.badRequest().build();
+		}
+	}
+
+	public DadUserDto update(Long id, DadUser dadUser) {
+
+		Optional<DadUser> optional = repository.findById(id);
+
+		if (optional.isPresent()) {
+			DadUser db = optional.get();
+
+			db.setCellphone(dadUser.getCellphone());
+			db.setEmail(dadUser.getEmail());
+			db.setName(dadUser.getName());
+			db.setPhoto(dadUser.getPhoto());
+			db.setUsername(dadUser.getUsername());
+			db.setPassword(passwordEncoder.encode(dadUser.getPassword()));
+
+			repository.save(db);
+			return DadUserDto.create(db);
+		} else {
+			return null;
 		}
 	}
 
@@ -116,16 +165,40 @@ public class DadUserService {
 		return DadUserDto.create(repository.save(dadUser));
 	}
 
-	public DadUserDto userAccountActivation(DadUser dadUser) {
-		dadUser.setAccountActive(true);
+	public DadUserDto userAccountActivation(Long id) {
 
-		return DadUserDto.create(repository.save(dadUser));
+		Optional<DadUser> dadUser = repository.findById(id);
+
+		if (dadUser != null) {
+			DadUser db = dadUser.get();
+
+			db.setAccountActive(true);
+
+			return DadUserDto.create(repository.save(db));
+		} else {
+			return null;
+		}
+
 	}
 
-	public DadUserDto userDisableAccount(DadUser dadUser) {
-		dadUser.setAccountActive(false);
+	public DadUserDto userDisableAccount(Long id) {
 
-		return DadUserDto.create(repository.save(dadUser));
+		Optional<DadUser> dadUser = repository.findById(id);
+
+		if (dadUser != null) {
+			DadUser db = dadUser.get();
+
+			db.setAccountActive(false);
+
+			return DadUserDto.create(repository.save(db));
+		} else {
+			return null;
+		}
+
+	}
+
+	public Optional<DadUser> getById(Long id) {
+		return repository.findById(id);
 	}
 
 	public DadUser getByEmail(String email) {

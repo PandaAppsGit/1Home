@@ -12,13 +12,13 @@ public class PhysiotherapistDto {
 
 	private Long id;
 
-	private boolean active;
-
 	private String crefito;
 
 	private String name;
 	private String email;
 	private String cellphone;
+
+	private String photo;
 
 	public static PhysiotherapistDto create(Physiotherapist p) {
 		ModelMapper modelMapper = new ModelMapper();

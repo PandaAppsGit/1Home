@@ -5,7 +5,9 @@ import java.util.Optional;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.stereotype.Component;
 
+import br.com.home.models.DadUser;
 import br.com.home.models.Role;
+import br.com.home.services.DadUserService;
 import br.com.home.services.RoleService;
 
 @Component
@@ -13,13 +15,17 @@ public class DataLoader implements CommandLineRunner {
 
 	private RoleService service;
 
-	public DataLoader(RoleService service) {
+	private DadUserService dadUserService;
+
+	public DataLoader(RoleService service, DadUserService dadUserService) {
 		this.service = service;
+		this.dadUserService = dadUserService;
 	}
 
 	@Override
 	public void run(String... args) throws Exception {
 		initRoles();
+		createAdmin();
 	}
 
 	private void initRoles() {
@@ -66,5 +72,23 @@ public class DataLoader implements CommandLineRunner {
 			service.saveRole(roleAdmin);
 		}
 
+	}
+
+	private void createAdmin() {
+		Optional<DadUser> dadUser = dadUserService.getById(1L);
+
+		if (!dadUser.isPresent()) {
+
+			DadUser admin = new DadUser();
+
+			admin.setId(1L);
+			admin.setCellphone("9999999999");
+			admin.setEmail("admin@admin.com");
+			admin.setName("Admin");
+			admin.setPassword("admin");
+			admin.setUsername("admin");
+
+			dadUserService.adminSignUp(admin);
+		}
 	}
 }

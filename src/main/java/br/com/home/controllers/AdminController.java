@@ -2,8 +2,6 @@ package br.com.home.controllers;
 
 import java.net.URI;
 
-import javax.servlet.http.HttpServletRequest;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -24,9 +22,9 @@ public class AdminController {
 	DadUserService dadUserService;
 
 	@PostMapping("/sign-up")
-	public ResponseEntity<URI> signUp(@RequestBody Admin admin, HttpServletRequest request) {
+	public ResponseEntity<URI> signUp(@RequestBody Admin admin) {
 
-		DadUserDto dadUser = dadUserService.signUp(admin, "ROLE_ADMIN", request);
+		DadUserDto dadUser = dadUserService.adminSignUp(admin);
 
 		URI location = getUri(dadUser.getId());
 
