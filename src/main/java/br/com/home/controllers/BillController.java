@@ -17,22 +17,22 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
-import br.com.home.dtos.IndicationDto;
-import br.com.home.models.Indication;
-import br.com.home.services.IndicationService;
+import br.com.home.dtos.BillDto;
+import br.com.home.models.Bill;
+import br.com.home.services.BillService;
 
 @RestController
-@RequestMapping("api/v1/indications")
-public class IndicationController {
+@RequestMapping("api/v1/bills")
+public class BillController {
 
 	@Autowired
-	IndicationService indicationService;
+	BillService billService;
 
 	@PostMapping
-	@Secured({ "ROLE_DOCTOR", "ROLE_ADMIN" })
-	public ResponseEntity<URI> post(@RequestBody Indication indication) {
+	@Secured({ "ROLE_ADMIN" })
+	public ResponseEntity<URI> post(@RequestBody Bill bill) {
 
-		IndicationDto i = indicationService.save(indication);
+		BillDto i = billService.save(bill);
 
 		URI location = getUri(i.getId());
 
@@ -44,28 +44,28 @@ public class IndicationController {
 		return ServletUriComponentsBuilder.fromCurrentRequest().path("/{id}").buildAndExpand(id).toUri();
 	}
 
-	@Secured({ "ROLE_ADMIN", "ROLE_DOCTOR" })
+	@Secured({ "ROLE_ADMIN" })
 	@PutMapping("/{id}")
-	public ResponseEntity<IndicationDto> update(@PathVariable Long id, @RequestBody Indication indication) {
+	public ResponseEntity<BillDto> update(@PathVariable Long id, @RequestBody Bill bill) {
 
-		IndicationDto indicationDto = indicationService.update(id, indication);
+		BillDto billDto = billService.update(id, bill);
 
-		return ResponseEntity.ok(indicationDto);
+		return ResponseEntity.ok(billDto);
 	}
 
 	@Secured({ "ROLE_ADMIN" })
 	@GetMapping
-	public ResponseEntity<List<IndicationDto>> getAll() {
-		return ResponseEntity.ok(indicationService.getAll());
+	public ResponseEntity<List<BillDto>> getAll() {
+		return ResponseEntity.ok(billService.getAll());
 	}
 
 	@Secured({ "ROLE_ADMIN" })
 	@GetMapping("/{id}")
-	public ResponseEntity<IndicationDto> getOne(@PathVariable("id") Long id) {
-		Optional<IndicationDto> indication = indicationService.getById(id);
+	public ResponseEntity<BillDto> getOne(@PathVariable("id") Long id) {
+		Optional<BillDto> bill = billService.getById(id);
 
-		if (indication.isPresent()) {
-			return ResponseEntity.ok(indication.get());
+		if (bill.isPresent()) {
+			return ResponseEntity.ok(bill.get());
 		} else {
 			return ResponseEntity.notFound().build();
 		}
@@ -73,10 +73,11 @@ public class IndicationController {
 
 	@DeleteMapping("/{id}")
 	@Secured({ "ROLE_ADMIN" })
-	public ResponseEntity<IndicationDto> delete(@PathVariable("id") Long id) {
-		indicationService.delete(id);
+	public ResponseEntity<BillDto> delete(@PathVariable("id") Long id) {
+		billService.delete(id);
 
 		return ResponseEntity.ok().build();
 
 	}
+
 }

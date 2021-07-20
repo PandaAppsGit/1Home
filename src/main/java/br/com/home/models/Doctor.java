@@ -28,4 +28,7 @@ public class Doctor extends DadUser {
 	@Cascade(CascadeType.ALL)
 	private List<Indication> indications = new ArrayList<Indication>();
 
+	@OneToMany(mappedBy = "doctor")
+	private List<Client> clients = new ArrayList<Client>();
+
 }

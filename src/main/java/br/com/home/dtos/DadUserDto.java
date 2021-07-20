@@ -22,11 +22,8 @@ public class DadUserDto {
 	private boolean emailActive;
 
 	private String username;
-	private String password;
 
 	private String name;
-	private String email;
-	private String cellphone;
 	private String photo;
 
 	private String token;

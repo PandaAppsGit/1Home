@@ -17,22 +17,22 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
-import br.com.home.dtos.IndicationDto;
-import br.com.home.models.Indication;
-import br.com.home.services.IndicationService;
+import br.com.home.dtos.TreatmentDto;
+import br.com.home.models.Treatment;
+import br.com.home.services.TreatmentService;
 
 @RestController
-@RequestMapping("api/v1/indications")
-public class IndicationController {
+@RequestMapping("api/v1/treatments")
+public class TreatmentController {
 
 	@Autowired
-	IndicationService indicationService;
+	TreatmentService treatmentService;
 
 	@PostMapping
-	@Secured({ "ROLE_DOCTOR", "ROLE_ADMIN" })
-	public ResponseEntity<URI> post(@RequestBody Indication indication) {
+	@Secured({ "ROLE_ADMIN" })
+	public ResponseEntity<URI> post(@RequestBody Treatment treatment) {
 
-		IndicationDto i = indicationService.save(indication);
+		TreatmentDto i = treatmentService.save(treatment);
 
 		URI location = getUri(i.getId());
 
@@ -44,28 +44,26 @@ public class IndicationController {
 		return ServletUriComponentsBuilder.fromCurrentRequest().path("/{id}").buildAndExpand(id).toUri();
 	}
 
-	@Secured({ "ROLE_ADMIN", "ROLE_DOCTOR" })
+	@Secured({ "ROLE_ADMIN" })
 	@PutMapping("/{id}")
-	public ResponseEntity<IndicationDto> update(@PathVariable Long id, @RequestBody Indication indication) {
+	public ResponseEntity<TreatmentDto> update(@PathVariable Long id, @RequestBody Treatment treatment) {
 
-		IndicationDto indicationDto = indicationService.update(id, indication);
+		TreatmentDto treatmentDto = treatmentService.update(id, treatment);
 
-		return ResponseEntity.ok(indicationDto);
+		return ResponseEntity.ok(treatmentDto);
 	}
 
-	@Secured({ "ROLE_ADMIN" })
 	@GetMapping
-	public ResponseEntity<List<IndicationDto>> getAll() {
-		return ResponseEntity.ok(indicationService.getAll());
+	public ResponseEntity<List<TreatmentDto>> getAll() {
+		return ResponseEntity.ok(treatmentService.getAll());
 	}
 
-	@Secured({ "ROLE_ADMIN" })
 	@GetMapping("/{id}")
-	public ResponseEntity<IndicationDto> getOne(@PathVariable("id") Long id) {
-		Optional<IndicationDto> indication = indicationService.getById(id);
+	public ResponseEntity<TreatmentDto> getOne(@PathVariable("id") Long id) {
+		Optional<TreatmentDto> treatment = treatmentService.getById(id);
 
-		if (indication.isPresent()) {
-			return ResponseEntity.ok(indication.get());
+		if (treatment.isPresent()) {
+			return ResponseEntity.ok(treatment.get());
 		} else {
 			return ResponseEntity.notFound().build();
 		}
@@ -73,10 +71,11 @@ public class IndicationController {
 
 	@DeleteMapping("/{id}")
 	@Secured({ "ROLE_ADMIN" })
-	public ResponseEntity<IndicationDto> delete(@PathVariable("id") Long id) {
-		indicationService.delete(id);
+	public ResponseEntity<TreatmentDto> delete(@PathVariable("id") Long id) {
+		treatmentService.delete(id);
 
 		return ResponseEntity.ok().build();
 
 	}
+
 }

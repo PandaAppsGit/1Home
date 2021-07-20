@@ -28,6 +28,9 @@ public class DoctorDto {
 	@JsonIgnoreProperties({ "doctor" })
 	private List<Indication> indications;
 
+	@JsonIgnoreProperties({ "doctor", "sections", "bills" })
+	private List<ClientDto> clients;
+
 	public static DoctorDto create(Doctor d) {
 		ModelMapper modelMapper = new ModelMapper();
 

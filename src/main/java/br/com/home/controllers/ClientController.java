@@ -66,4 +66,16 @@ public class ClientController {
 		}
 	}
 
+	@Secured({ "ROLE_ADMIN", "ROLE_DOCTOR" })
+	@GetMapping("/doctor/{id}")
+	public ResponseEntity<List<ClientDto>> getByDoctor(@PathVariable Long id) {
+		return ResponseEntity.ok(clientService.getByDoctor(id));
+	}
+
+	@Secured({ "ROLE_ADMIN", "ROLE_PHYSIOTHERAPIST" })
+	@GetMapping("/physiotherapist/{id}")
+	public ResponseEntity<List<ClientDto>> getByPhysiotherapist(@PathVariable Long id) {
+		return ResponseEntity.ok(clientService.getByPhysiotherapist(id));
+	}
+
 }

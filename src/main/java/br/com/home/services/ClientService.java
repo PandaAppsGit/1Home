@@ -39,4 +39,28 @@ public class ClientService {
 		}
 	}
 
+	public List<ClientDto> getByDoctor(Long id) {
+		List<Client> clients = repository.findByDoctor(id);
+
+		List<ClientDto> list = new ArrayList<>();
+
+		for (Client c : clients) {
+			list.add(ClientDto.create(c));
+		}
+
+		return list;
+	}
+
+	public List<ClientDto> getByPhysiotherapist(Long id) {
+		List<Client> clients = repository.findByPhysiotherapist(id);
+
+		List<ClientDto> list = new ArrayList<>();
+
+		for (Client c : clients) {
+			list.add(ClientDto.create(c));
+		}
+
+		return list;
+	}
+
 }

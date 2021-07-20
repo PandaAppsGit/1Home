@@ -17,22 +17,22 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
-import br.com.home.dtos.IndicationDto;
-import br.com.home.models.Indication;
-import br.com.home.services.IndicationService;
+import br.com.home.dtos.EvaluationDto;
+import br.com.home.models.Evaluation;
+import br.com.home.services.EvaluationService;
 
 @RestController
-@RequestMapping("api/v1/indications")
-public class IndicationController {
+@RequestMapping("api/v1/evaluations")
+public class EvaluationController {
 
 	@Autowired
-	IndicationService indicationService;
+	EvaluationService evaluationService;
 
 	@PostMapping
-	@Secured({ "ROLE_DOCTOR", "ROLE_ADMIN" })
-	public ResponseEntity<URI> post(@RequestBody Indication indication) {
+	@Secured({ "ROLE_PHYSIOTHERAPIST", "ROLE_ADMIN" })
+	public ResponseEntity<URI> post(@RequestBody Evaluation evaluation) {
 
-		IndicationDto i = indicationService.save(indication);
+		EvaluationDto i = evaluationService.save(evaluation);
 
 		URI location = getUri(i.getId());
 
@@ -44,39 +44,40 @@ public class IndicationController {
 		return ServletUriComponentsBuilder.fromCurrentRequest().path("/{id}").buildAndExpand(id).toUri();
 	}
 
-	@Secured({ "ROLE_ADMIN", "ROLE_DOCTOR" })
+	@Secured({ "ROLE_PHYSIOTHERAPIST", "ROLE_ADMIN" })
 	@PutMapping("/{id}")
-	public ResponseEntity<IndicationDto> update(@PathVariable Long id, @RequestBody Indication indication) {
+	public ResponseEntity<EvaluationDto> update(@PathVariable Long id, @RequestBody Evaluation evaluation) {
 
-		IndicationDto indicationDto = indicationService.update(id, indication);
+		EvaluationDto evaluationDto = evaluationService.update(id, evaluation);
 
-		return ResponseEntity.ok(indicationDto);
+		return ResponseEntity.ok(evaluationDto);
 	}
 
 	@Secured({ "ROLE_ADMIN" })
 	@GetMapping
-	public ResponseEntity<List<IndicationDto>> getAll() {
-		return ResponseEntity.ok(indicationService.getAll());
+	public ResponseEntity<List<EvaluationDto>> getAll() {
+		return ResponseEntity.ok(evaluationService.getAll());
 	}
 
-	@Secured({ "ROLE_ADMIN" })
+	@Secured({ "ROLE_ADMIN", })
 	@GetMapping("/{id}")
-	public ResponseEntity<IndicationDto> getOne(@PathVariable("id") Long id) {
-		Optional<IndicationDto> indication = indicationService.getById(id);
+	public ResponseEntity<EvaluationDto> getOne(@PathVariable("id") Long id) {
+		Optional<EvaluationDto> evaluation = evaluationService.getById(id);
 
-		if (indication.isPresent()) {
-			return ResponseEntity.ok(indication.get());
+		if (evaluation.isPresent()) {
+			return ResponseEntity.ok(evaluation.get());
 		} else {
 			return ResponseEntity.notFound().build();
 		}
 	}
 
 	@DeleteMapping("/{id}")
-	@Secured({ "ROLE_ADMIN" })
-	public ResponseEntity<IndicationDto> delete(@PathVariable("id") Long id) {
-		indicationService.delete(id);
+	@Secured({ "ROLE_PHYSIOTHERAPIST", "ROLE_ADMIN" })
+	public ResponseEntity<EvaluationDto> delete(@PathVariable("id") Long id) {
+		evaluationService.delete(id);
 
 		return ResponseEntity.ok().build();
 
 	}
+
 }
